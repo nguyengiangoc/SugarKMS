@@ -14,7 +14,7 @@
     //define phan duoi cua URL 
     
     defined("SITE_URL")
-        || define("SITE_URL", "http://localhost/ecommerce");
+        || define("SITE_URL", "http://localhost/sugarkms");
     //kiem tra xem site url da duoc dat chua, neu chua thi` dat, neu dat roi thi khong lam gi ca
     // $_SERVER['SERVER_NAME'] tra ve ten mien cua website
     //define constant de co the dung bat cu dau
@@ -58,6 +58,9 @@
         
     defined("CATALOGUE_PATH")
         || define("CATALOGUE_PATH", ROOT_PATH . DS . "media" . DS . "catalogue");
+        
+    defined("IMAGES_PATH")
+        || define("IMAGES_PATH", ROOT_PATH . DS . "images");
         
     set_include_path(implode(PATH_SEPARATOR, array(
     //them tat ca cac duong dan o tren vao include path

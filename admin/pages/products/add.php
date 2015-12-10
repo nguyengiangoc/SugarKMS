@@ -26,7 +26,7 @@
             'meta_description',
             'meta_keywords'
         );
-        if($objValid->isValid()) {
+            if($objValid->isValid()) {
             $objValid->_post['identity'] = Helper::cleanString($objValid->_post['identity']);
             
             if($objCatalogue->isDuplicateProduct($objValid->_post['identity'])) {
@@ -107,7 +107,7 @@
         </tr>
         <tr>
             <th><label for="image">Image: *</label></th>
-            <td><?php echo $objValid->validate('image'); ?><input type="file" name="image" id="image" size="30" /></td>
+            <td><input type="file" name="image" id="image" size="30" /></td>
         </tr>
         <tr>
             <th>&nbsp;</th>

@@ -41,6 +41,7 @@
                     'email'
                 );
                 $objValid->_special = array('email' => 'email');
+                
                 $email = $objForm->getPost('email');
                 $duplicate = $objUser->getByEmail($email);
                 if (!empty($duplicate) && $duplicate['id'] != $user['id']) {

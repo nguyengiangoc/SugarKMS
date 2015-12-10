@@ -1,8 +1,8 @@
 <IfModule mod_rewrite.c>
 Options +FollowSymlinks
 RewriteEngine on
-RewriteBase /ecommerce/
+RewriteBase /sugarkms/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule .* /ecommerce/index.php [L] 
+RewriteRule .* /sugarkms/index.php [L] 
 </IfModule>

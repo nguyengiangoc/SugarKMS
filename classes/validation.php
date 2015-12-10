@@ -2,48 +2,35 @@
     class Validation {
         private $objForm;
         
-        private $_errors = array();
+        public $_errors = array();
         
         public $_errorsMessages = array();
         
         public $_message = array(
-            "first_name" => "Please provide your first name",
-            "last_name" => "Please provide your last name",
-            "address_1" => "Please provide the first line of your address",
-            "address_2" => "Please provide the second line of your address",
-            "town" => "Please provide your town name",
-            "county" => "Please provide your conty name",
-            "post_code" => "Please provide your post code",
-            "country" => "Please select your country",
-            
-            "same_address" => "Please select one option",
-            "ship_address_1" => "Please provide the first line of the shipping address",
-            "ship_address_2" => "Please provide the second line of the shipping address",
-            "ship_town" => "Please provide the shipping town name",
-            "ship_county" => "Please provide the shipping conty name",
-            "ship_post_code" => "Please provide the shipping post code",
-            "ship_country" => "Please select the shipping country",
-            
-            "email" => "Please provide your valid email address",
-            "login" => "Username and/or password are incorrect",
-            "password" => "Please choose your password",
-            "confirm_password" => "Please confirm your password",
-            "password_mismatch" => "Passwords did not match",
-            "email_duplicate" => "This email has already been registered",
-            "category" => "Please select one category",
-            "name" => "Please provide a name",
-            "description" => "Please provide a description",
-            "price" => "Please provide a price",
-            "name_duplicate" => "This name is already taken",
-            "email_inactive" => "This email is not activated",
-            "identity" => "Please provide the identity",
-            "duplicate_identity" => "This identity is already taken",
-            "meta_title" => "Please provide the meta title",
-            "meta_description" => "Please provide the meta description",
-            "meta_keywords" => "Please provide the meta keywords",
-            
-            "weight" => "Please provide the weight",
-            "cost" => "Please provide the cost"
+            "name" => "Please provide the name",
+            "gender" => "Please provide the gender",
+            "day" => "Please provide the day in the date of birth",
+            "month" => "Please provide the month in the date of birth",
+            "year" => "Please provide the year in the date of birth",
+            "personal_email" => "Please provide the personal email",
+            "not_email" => "Your input does not have the structure of an email",
+            "duplicate_email" => "This email is already recorded in another profile",
+            "phone" => "Please provide the phone number",
+            "skype" => "Pleas provide the skype nickname",
+            "facebook" => "Please provide the link to the member's Facebook personal page",
+            "high_school" => "Please provide the high school",
+            "uni" => "Please provide the university",
+            "login" => "Your combination of email and password is not valid.",
+            "grad_year_h" => "Please provide the high school graduation year",
+            "grad_year_u" => "Please provide the university graduation year",
+            "project_type_id" => "Please select the project type",
+            "project_year" => "Please select the project year",
+            "current" => "Please provide the current password",
+            "current_mismatch" => "The password provided does not match your current password",
+            "new" => "Please provide the new password",
+            "retype" => "Please retype the new password",
+            "new_mismatch" => "The retype new password does not match the new password."
+
         );
         
         public $_expected = array();
@@ -85,7 +72,7 @@
         
         public function check($key, $value) {
             if(!empty($this->_special) && array_key_exists($key, $this->_special)) {
-                $this->checkSpecial($key, $value);
+                $this->checkSpecial($key, $value, $this->_special[$key]);
             } else {
                 if(in_array($key, $this->_required) && Helper::isEmpty($value)) {
                 //neu 
@@ -107,12 +94,19 @@
             
         }
         
-        public function checkSpecial($key, $value) {
-            switch($this->_special[$key]) {
+        public function checkSpecial($key, $value, $type) {
+            switch($type) {
                 case('email'):
-                if(!$this->isEmail($value)) {
-                    $this->add2Errors($key);
-                }
+                    if(empty($value)) {
+                        $this->add2Errors($key);
+                    } else {
+                        if($value != 'N/A') {
+                            if(!$this->isEmail($value)) {
+                                $this->_errors['not_email'] = $key;
+                            }
+                        }
+                        
+                    }
                 break;
             }
         }
@@ -162,7 +156,13 @@
         
         public function validate($key) {
             if(!empty($this->_errors) && in_array($key, $this->_errors)) {
-                return $this->wrapWarn($this->_message[$key]);
+                $index = array_search($key, $this->_errors);
+                if(is_string($index) && $index == 'not_email') {
+                    return $this->wrapWarn($this->_message['not_email']);
+                } else {
+                    return $this->wrapWarn($this->_message[$key]);
+                }
+                
             }
             //method nay de hien thi loi~ cu the cua mot field
             //duoc goi ra ngay truoc field do trong form

@@ -1,4 +1,4 @@
 <?php
-Login::logout(Login::$_login_front);
-Login::restrictFront($this->objURL);
+Login::logout();
+Login::restrictAdmin($this->objURL);
 ?>

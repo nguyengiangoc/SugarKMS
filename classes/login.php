@@ -1,29 +1,45 @@
 <?php
     class Login {
         
-        public static $_login_page_front = "/ecommerce/login";
-        
-        public static $_dashboard_front = "/ecommerce/orders";
-        
         public static $_login_front = "cid";
-        
-        public static $_login_page_admin = "/ecommerce/panel";
-        
-        public static $_dashboard_admin = "/ecommerce/panel/products";
-        
+        public static $_login_page_admin = "/sugarkms/";
+        public static $_dashboard_admin = "/sugarkms/panel/products";
+        public static $_default = "/sugarkms/members";
         public static $_login_admin = "aid";
-        
         public static $_valid_login = "valid";
-        
         public static $_referrer = "refer";
+        public static $_cookie_name = 'SugarKMSCookie';
+        public static $_cookie_time = 2592000; //30 days
+        
+        
+        public static function checkCookie() {
+            if(isset($_COOKIE[self::$_cookie_name])) {
+                parse_str($_COOKIE[self::$_cookie_name]);
+                $objMember = new Member();
+                $result = $objMember->getMemberByHash($hash);
+                if(!empty($result)) {
+                    $time = $result['time'];
+                    if($time < time() + 2592000) {
+                        $_SESSION[self::$_login_admin] = $result['id'];
+                        $_SESSION[self::$_valid_login] = 1;
+                    } else {
+                        $objMember->updateMember(array('cookie_hash' => '', 'time' => 0),$result['id']);
+                        setcookie(self::$_cookie_name, "", time() - 3600, '/', $_SERVER['SERVER_NAME']);
+                        unset($_COOKIE[self::$_cookie_name]);
+                    }
+                }
+                
+            }
+        }
+        
         
         public static function isLogged($case = null) {
             if(!empty($case)) {
                 if(isset($_SESSION[self::$_valid_login]) && $_SESSION[self::$_valid_login] == 1) {
                 //kiem tra xem trong array session co attribute valid = 1  khong
                     return isset($_SESSION[$case]) ? true :  false;
-                    //kiem tra xem trong array session co attribute cid khong
-                }
+                    //kiem tra xem trong array session co attribute cid hoac aid khong
+                } 
                 return false;
             }
             return false;
@@ -38,33 +54,28 @@
             }
         }
         
-        public static function loginAdmin($id = null, $url = null) {
+        public static function loginAdmin($id = null, $url = null, $remember = null) {
             if(!empty($id)) {
                 $url = !empty($url) ? $url : self::$_dashboard_admin;
                 $_SESSION[self::$_login_admin] = $id;
                 $_SESSION[self::$_valid_login] = 1;
+                if($remember == 1) {
+                    $hash = md5(time().$id);
+                    $objMember = new Member();
+                    $objMember->updateMember(array('cookie_hash' => $hash, 'time' => time()),$id);
+                    setcookie(self::$_cookie_name, 'hash='.$hash, time() + self::$_cookie_time, '/', $_SERVER['SERVER_NAME']);
+                }
                 Helper::redirect($url);
             }
         }
-               
-        public static function restrictFront($objURL = null) {
-            $objURL = is_object($objURL) ? $objURL : new URL();
-            if(!self::isLogged(self::$_login_front)) {
-                //neu nguoi dung chua login thi chuyen huong sang trang login
-                $url = $objURL->cpage != "logout" ?
-                //neu trang dang o khong phai la trang log out 
-                self::$_login_page_front."/".self::$_referrer."/".$objURL->cpage.PAGE_EXT :
-                    //dua den trang login, tren url them vao thong tin la den tu trang nao trong attribute referrer de sau khi login 
-                    //redirect nguoi dung ve trang ho dang xem truoc do
-                    self::$_login_page_front.PAGE_EXT;
-                    //neu trang dang o la trang log out thi dua den trang log in khong them gi vao url
-                Helper::redirect($url);
-            }    
-        }
         
-        public static function restrictAdmin() {
+        public static function restrictAdmin($objURL = null) {
+            $objURL = is_object($objURL) ? $objURL : new URL();
             if(!self::isLogged(self::$_login_admin)) {
-                Helper::redirect(self::$_login_page_admin);
+                $url = $objURL->cpage != "logout" ?
+                    self::$_login_page_admin.'index/'.self::$_referrer."/".$objURL->cpage.PAGE_EXT :
+                    self::$_login_page_admin.PAGE_EXT;
+                Helper::redirect($url);
             }
         }
         
@@ -84,15 +95,15 @@
             }
         }
         
-        public static function logout($case = null) {
-            if (!empty($case)) {
-                $_SESSION[$case] = null;
-                $_SESSION[self::$_valid_login] = null;
-                unset($_SESSION[$case]);
-                unset($_SESSION[self::$_valid_login]);
-            } else {
-                session_destroy();
-            }
+        public static function logout() {
+            $objMember = new Member();
+            $objMember->updateMember(array('cookie_hash' => '', 'time' => 0),$_SESSION['aid']);
+            $_SESSION['aid'] = null;
+            $_SESSION['valid'] = null;
+            unset($_SESSION['aid']);
+            unset($_SESSION['valid']);
+            setcookie(self::$_cookie_name, "", time() - 3600, '/', $_SERVER['SERVER_NAME']);
+            unset($_COOKIE[self::$_cookie_name]);
         }
         
     }

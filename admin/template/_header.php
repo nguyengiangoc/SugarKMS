@@ -3,9 +3,9 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Ecommerce website project</title>
-    <meta name="description" content="Ecommerece website project" />
-    <meta name="keywords" content="Ecommerce website project" />
+    <title>Sugar KMS</title>
+    <meta name="description" content="Sugar KMS" />
+    <meta name="keywords" content="Sugar KMS" />
     <meta http-equiv="imagetoolbar" content="no" />
     <link href="/ecommerce/css/core.css" rel="stylesheet" type="text/css" />
 </head>
@@ -13,13 +13,13 @@
 <body>
     <div id="header">
         <div id="header_in">
-            <h5><a href="/ecommerce/panel">Content Management System</a></h5>
+            <h5><a href="/sugarkms/panel">Sugar KMS</a></h5>
             <?php 
-                if(Login::isLogged(Login::$_login_admin)) {
-                    echo '<div id="logged_as">Logged in as: <strong>'.$this->objAdmin->getFullNameAdmin(Session::getSession(Login::$_login_admin)).'</strong> | <a href="/ecommerce/panel/logout">Logout</a></div>';
+                /*if(Login::isLogged(Login::$_login_admin)) {
+                    echo '<div id="logged_as">Logged in as: <strong>'.$this->objAdmin->getFullNameAdmin(Session::getSession(Login::$_login_admin)).'</strong> | <a href="/sugarkms/panel/logout">Logout</a></div>';
                 } else {
-                    echo '<div id="logged_as"><a href="/ecommerce/panel/">Login</a></div>';   
-                }
+                    echo '<div id="logged_as"><a href="/sugarkms/panel/">Login</a></div>';   
+                }*/
             ?>
         </div>
     </div>

@@ -106,6 +106,8 @@
             $sql = "INSERT INTO `{$table}` (`".implode("`, `", $this->_insert_keys) . "`) VALUES ('" . implode("', '", $this->_insert_values) . "')";
                 
                 if($this->query($sql)) {
+                    $this->_insert_keys = array();
+                    $this->_insert_values = array();
                     $this->_id = $this->lastId();
                     return true;
                 } 

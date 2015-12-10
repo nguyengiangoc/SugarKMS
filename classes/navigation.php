@@ -11,8 +11,8 @@
             if(!empty($main)) {
                 if(empty($pairs)) {
                     if($main == $this->objURL->main) {
-                        return !$single ? ' '.$this->classActive : ' class="'.$this->classActive.'"';
-                    }
+                                return !$single ? ' '.$this->classActive : ' class="'.$this->classActive.'"';
+                    }              
                 } else { //pair duoc cho vao o dang array 1 thanh phan: key la param, element la property
                     $exceptions = array();
                     foreach($pairs as $key => $value) {

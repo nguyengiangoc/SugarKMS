@@ -1,12 +1,13 @@
 <?php
     class Admin extends Application {
         private $_table = 'admins';
+        private $_members = 'members';        
         public $_id;
         
         public function isUser($email = null, $password = null) {
             if(!empty($email) && !empty($password)) {
-                $password = Login::string2Hash($password);
-                $sql = "SELECT * FROM `{$this->_table}` WHERE `email` = '".$this->db->escape($email)."' AND `password` = '".$this->db->escape($password)."'";
+                //$password = Login::string2Hash($password);
+                $sql = "SELECT * FROM `{$this->_members}` WHERE `personal_email` = '".$this->db->escape($email)."' AND `password` = '".$this->db->escape($password)."'";
                 $result = $this->db->fetchOne($sql);
                 if(!empty($result)) {
                     $this->_id = $result['id'];
@@ -16,14 +17,12 @@
             }
         }
         
-        public function getFullNameAdmin($id = null) {
+        public function getAdminProfile($id = null) {
             if(!empty($id)) {
-                $sql = "SELECT *, CONCAT_WS(' ', `first_name`, `last_name`) AS `full_name` FROM `{$this->_table}` WHERE `id` = ".intval($id);
-                $result = $this->db->fetchOne($sql);
-                if(!empty($result)) {
-                    return $result['full_name'];
-                }
+                $sql = "SELECT * FROM `{$this->_members}` WHERE `id` = ".intval($id);
+                return $this->db->fetchOne($sql);
             }
         }
+        
     }
 ?>

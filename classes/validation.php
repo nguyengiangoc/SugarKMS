@@ -1,10 +1,12 @@
 <?php
     class Validation {
-        private $objForm;
+        public $objForm;
         
         public $_errors = array();
         
         public $_errorsMessages = array();
+        
+        public $_prefilled_fields = '';
         
         public $_message = array(
             "name" => "Please provide the name",
@@ -50,6 +52,22 @@
             $this->objForm = is_object($objForm) ? $objForm : new Form();
         }
         
+        public function displayRequired($keyword = null) {
+            if(!empty($keyword)) {
+                if(in_array($keyword, $this->_required)) {
+                    return '*';
+                }
+            }
+        }
+        
+        public function displayPrefilledRequired($keyword = null) {
+            if(!empty($keyword)) {
+                if(array_key_exists($keyword, $this->_prefilled_fields)) {
+                    return '*';
+                }
+            }
+        }
+        
         public function process() {
             if($this->objForm->isPost()) {
                 //neu da co cac thanh phan trong array post va trong array required co ten cac field can phai dien
@@ -59,7 +77,21 @@
                 if(!empty($this->_post)) {
                     foreach($this->_post as $key => $value) {
                     //luc nay da lay xong cac thanh phan trong array post
-                        $this->check($key, $value); 
+                        if(!empty($this->_special)) {
+                            foreach($this->_special as $case) {
+                                if(in_array($key, $case)) {
+                                    $this->checkSpecial($key, $value, $case['case_type']);
+                                }
+                            } 
+                            
+                        } 
+                        
+                        if(in_array($key, $this->_required) && Helper::isEmpty($value)) {
+                        //neu 
+                            $this->add2Errors($key);
+                        }
+                        
+                        //$this->check($key, $value); 
                         //tien hanh kiem tra tung thanh phan trong array post
                         //thanh phan email nam trong array special
                         //nen khi vong lap chay toi thanh phan email se chay quay ham checkSpecial, tuc la chay qua ham isEmail\
@@ -67,6 +99,20 @@
                         //cho vao array error
                     }
                 }
+            }
+        }
+        
+        public function checkSpecial($key, $value, $type) {
+            switch($type) {
+                case('check_is_email'):
+                    if(empty($value)) {
+                        $this->add2Errors($key);
+                    } else {
+                        if(!$this->isEmail($value)) {
+                            $this->_errors['not_email'] = $key;
+                        }
+                    }
+                break;
             }
         }
         
@@ -94,22 +140,7 @@
             
         }
         
-        public function checkSpecial($key, $value, $type) {
-            switch($type) {
-                case('email'):
-                    if(empty($value)) {
-                        $this->add2Errors($key);
-                    } else {
-                        if($value != 'N/A') {
-                            if(!$this->isEmail($value)) {
-                                $this->_errors['not_email'] = $key;
-                            }
-                        }
-                        
-                    }
-                break;
-            }
-        }
+        
         
         public function isEmail($email = null) {
             if(!empty($email)) {
@@ -149,7 +180,7 @@
         public function format($key, $value) {
             switch($value) {
                 case 'password':
-                $this->_post[$key] = Login::string2hash($this->_post[$key]);
+                $this->_post[$key] = Login::hash($this->_post[$key]);
                 break;
             }
         }

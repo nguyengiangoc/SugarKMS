@@ -6,8 +6,6 @@
         $result = array();
         foreach($teams as $team) {
             $result[] = $team;
-         
-                            
         } 
         header('Content-type: application/json');
                        

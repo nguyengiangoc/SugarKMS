@@ -1,7 +1,6 @@
 <?php
     class URL {
         public $key_page = 'page';
-        public $key_modules = array('panel');
         public $module = 'front';
         public $main = 'index';
         public $cpage = 'index';
@@ -10,81 +9,135 @@
         public $params = array(); //tat ca nhung phan trong dau '/' tren link
         public $paramsRaw = array();
         public $stringRaw;
+        public $page_id = '';
         
         public function __construct() {
-            $this->process();
+            //$this->process();
         }
         
         public function process() {
             $uri = $_SERVER['REQUEST_URI'];
             if(!empty($uri)) {
-                $uriQ = explode('?', $uri); 
-                //cau truc cua link la abc/xyz.php?param=blah&param=blah
-                //tach ra de tim xem co param nao o tren link, sau dau cham hoi se la tat ca cac param duoc gan bang dau &, nen day la array
-                $uri = $uriQ[0]; //thanh phan dau tien se la link day du
-                if(count($uriQ) > 1) { //tren link ngoai link day du con co param
-                    $this->stringRaw = $uriQ[1]; 
-                    $uriRaw = explode('&', $uriQ[1]); //tach ra tung param
-                    if(count($uriRaw > 1)) { //neu co nhieu hon 1 param
-                        foreach($uriRaw as $key => $row) {
-                            $this->splitRaw($row); //dua param va property vao trong array paramsRaw theo cau truc key: param, value: property
-                        }
-                    } else {
-                        $this->splitRaw($uriRaw[0]); //neu co 1 param thi dua param dau tien vao trong array paramsRaw
-                    }
-                }
-                $uri = Helper::clearString($uri, PAGE_EXT); 
-                //xoa page_ext khoi duoi cua uri
-                //vi ext la .html, ma uri cung co duoi la .html, thi luc sau khi gan vao se la .html.html, khong duoc, nen phai xoa
+                
+                //$uriQ = explode('?', $uri); 
+//                //cau truc cua link la abc/xyz.php?param=blah&param=blah
+//                //tach ra de tim xem co param nao o tren link, sau dau cham hoi se la tat ca cac param duoc gan bang dau &, nen day la array
+//                $uri = $uriQ[0]; //thanh phan dau tien se la link day du
+//                if(count($uriQ) > 1) { //tren link ngoai link day du con co param
+//                    $this->stringRaw = $uriQ[1]; 
+//                    $uriRaw = explode('&', $uriQ[1]); //tach ra tung param
+//                    if(count($uriRaw > 1)) { //neu co nhieu hon 1 param
+//                        foreach($uriRaw as $key => $row) {
+//                            $this->splitRaw($row); //dua param va property vao trong array paramsRaw theo cau truc key: param, value: property
+//                        }
+//                    } else {
+//                        $this->splitRaw($uriRaw[0]); //neu co 1 param thi dua param dau tien vao trong array paramsRaw
+//                    }
+//                }
+
                 $firstChar = substr($uri, 0, 1);
                 if($firstChar == '/') {
-                    $uri = substr($uri, 1); //xoa dau '/' dau tien ra khoi uri
+                    $uri = substr($uri, 1); 
                 }
                 $lastChar = substr($uri, -1);
                 if($lastChar == '/') {
-                    $uri = substr($uri, 0, -1); //xoa dau '/' cuoi cung ra khoi uri
+                    $uri = substr($uri, 0, -1); 
                 }
-                // vi du uri tra ve la /ecommerce/ sau khi xoa di thi con lai ecommerce
+
                 if(!empty($uri)) {
-                    $uri = explode('/', $uri);
-                    //vd nhu dang o page ecommerce/panel, thi tach ra lam array ecommerce va panel
-                    $first = array_shift($uri); //loai phan tu dau tien khoi mang va tra ve phan tu dau tien, luc nay first la ecommerce
-                    $first = array_shift($uri); //phai lay lan thu hai moi ra duoc category
-                    //neu lam truc tiep tren host thi ten website la domain luon, nen uri se tra ve catalogue/category..., chi can 1 lan arrayshift
-                    //nhung dang lam tren localhost
-                    //uri tra ve la ecommerce/catalogue/category nen phai 2 lan array shift
-                    if(empty($first)) { $first = 'index'; }
-                    if(in_array($first, $this->key_modules)) {
-                        $this->module = $first; //module hien dang la front, chuyen sang thanh panel
-                        $first = empty($uri) ? $this->main : array_shift($uri); //neu van con thanh phan thi loai thanh phan dau tien ra
-                    }
-                    $this->main = $first; 
-                    //vd nhu 
-                    //vi du nhu ecommerce/panel/product, luc nay main se la product
-                    //con neu ma ecommerce/category/blah blah, luc nay main se la category
-                    $this->cpage = $this->main;
                     
-                    if(count($uri) > 1) {
-                        $pairs = array();
-                        foreach($uri as $key => $value) {
-                            $pairs[] = $value;
-                            if(count($pairs) > 1) {
-                                if(!Helper::isEmpty($pairs[1])) {
-                                    if($pairs[0] == $this->key_page) {
-                                        $this->cpage = $pairs[1];
-                                    } else if ($pairs[0] == 'c') {
-                                        $this->c = $pairs[1];
-                                    } else if ($pairs[0] == 'a') {
-                                        $this->a = $pairs[1];
+                    $uri = explode('/', $uri);
+                    array_shift($uri); 
+                    $this->cpage = array_shift($uri); 
+                    
+                    
+                    //$pairs = array();
+                    //foreach($uri as $key => $value) {
+//                            $pairs[] = $value;
+//                            if(count($pairs) > 1) {
+//                                if(!Helper::isEmpty($pairs[1])) {
+//                                    if($pairs[0] == $this->key_page) {
+//                                        $this->cpage = $pairs[1];
+//                                    } else if ($pairs[0] == 'c') {
+//                                        $this->c = $pairs[1];
+//                                    } else if ($pairs[0] == 'a') {
+//                                        $this->a = $pairs[1];
+//                                    }
+//                                    $this->params[$pairs[0]] = $pairs[1];
+//                                }
+//                                $pairs = array();
+//                            }
+//                        }
+
+                    
+                    
+                    $objPage = new Page();
+                    $group = $objPage->getGroups(array('name' => $this->cpage));
+                    
+                    if(!empty($group) && count($group) == 1) {
+                                                
+                        //neu cpage la mot trong nhung group da duoc luu trong dbase thi moi xet den params tren url
+                        $params = array();
+                        
+                        if(empty($uri)) {
+                            
+                            //neu khong co params tren url thi lay params cua default page cho vao
+                            $defaultPage = $objPage->getPages(array('default' => 1, 'group_id' => $group[0]['id']));
+                                                        
+                            if(!empty($defaultPage) && count($defaultPage) == 1) {
+                                $defaultParams = $objPage->getPageParams(array('page_id' => $defaultPage[0]['id']));
+                                foreach($defaultParams as $defaultParam) {
+                                    if($defaultParam['required_value'] != '') {
+                                        $params[$defaultParam['param']] = $defaultParam['required_value'];
+                                    } else {
+                                        $error = "No record found in database for this page.";
                                     }
-                                    $this->params[$pairs[0]] = $pairs[1];
+                                    
                                 }
-                                $pairs = array();
-                                //cu het hai value thi empty array pair mot lan de trong array pair chi duoc 2 value thoi
-                                //value dau tien la key trong param, value thu hai la gia tri cua param
                             }
+                            
+                        } else {
+                            
+                            if(count($uri) == 1 && is_numeric($uri[0])) {
+                                $uri[] = 'view';
+                            }
+                            
+                            $pages = $objPage->getPages(array('group_id' => $group[0]['id'])); 
+                        
+                            foreach ($pages as $page) {
+                                $params_db = $objPage->getPageParams(array('page_id' => $page['id']), array('order' => 'asc'));
+                                
+                                if(count($params_db) == count($uri)) {
+                                    //var_dump($params_db);
+                                    foreach ($params_db as $key => $param_db) {
+                                        //echo 'current key: '.$key.'<br />';
+    //                                        echo 'param db name: '.$param_db['param'].'<br />';
+    //                                        echo 'uri at current key: '.$uri[$key].'<br />';
+    //                                        echo '<br />';
+                                        if($param_db['required_value'] == '') {
+                                            $params[$param_db['param']] = $uri[$key];
+                                            unset($params_db[$key]);
+                                        } else {
+                                            if($uri[$key] == $param_db['required_value']) {
+                                                $params[$param_db['param']] = $uri[$key];
+                                                unset($params_db[$key]);
+                                            }
+                                        }
+                                    } 
+                                    //echo 'result: '.empty($params_db);
+                                    if(empty($params_db)) {
+                                        $this->page_id = $page['id'];
+                                        $this->params = $params;
+                                        break;
+                                    }
+                                }
+                                
+                            } 
+                            
                         }
                     }
+                    //var_dump($this->params);
+                    
                 }
             }
         }
@@ -152,7 +205,7 @@
             }
             $url = implode('/', $out);
             $url .= $extension ? PAGE_EXT : null;
-            return $url;
+            return '/sugarkms/'.$url;
             //ket qua la dang index/blah blah/blah blah
         }
 

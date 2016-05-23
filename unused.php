@@ -1,3 +1,67 @@
+                        //$.post(url,{object: 'involvement', params: params}, function(data) {
+//                            //console.log(data);
+//                            if(data) {
+//                                //var successMessage = '<span class="success"><span class="bold">NOTICE</span>: <span class="bold">' + $('#autocomplete').val() + '</span> has been added to this project.</span>';
+////                                $('#addMemberMessageRow').append(successMessage);
+////                                $('#addMemberMessageRow').slideDown('slow').delay(1500).slideUp();
+//                                if(!$('#positionOptionBlank').length) {
+//                                    $('#selectPosition').prepend('<option value="" class="positionOptionBlank" selected="selected"></option>');
+//                                }
+//                                if(!$('#teamOptionBlank').length) {
+//                                    $('#selectTeam').prepend('<option value="" class="teamOptionBlank" selected="selected"></option>');
+//                                }
+//                                $('#selectPosition, #selectTeam').attr('disabled', 'disabled');
+//                                $('#checkIcon').hide();
+//                                $('#autocomplete').val('');
+//                                var reload = $('#autocomplete').data('reload');
+//                                $.post(reload, function(data) {
+//                                    $('#list').html(data);
+//                                }, 'html');
+//                            }
+//                            
+//                        });
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
 //switch($(this).val()) {
 //                        
@@ -120,8 +184,8 @@
         
         <h1>
             <?php echo $project['name'].' '.$project['project_time'].' :: View'; ?>
-            <?php if($objMember->canEditProject($profile['id'], $id)) { ?>
-                <span style="float:right;font-size:12px;cursor:pointer;"><a href="/sugarkms/projects/action/edit/id/<?php echo $id; ?>"><u>Edit this <?php echo $project['project_type_id'] != 5 ? 'project' : 'EXCO'; ?></u></a></span>
+            <?php if($objMember->canEditProject($current_user['id'], $id)) { ?>
+                <span style="float:right;font-size:12px;cursor:pointer;"><a href="/sugarkms/project/action/edit/id/<?php echo $id; ?>"><u>Edit this <?php echo $project['project_type_id'] != 5 ? 'project' : 'EXCO'; ?></u></a></span>
             <?php } ?>
         </h1>     
         <!--
@@ -180,18 +244,18 @@
                         </tr>
                         <?php foreach($team['members'] as $member) { ?>
                         <tr class="<?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"> 
-                            <td class="br_td" >
+                            <td  >
                                 <a class="link_btn "
-                                href="/sugarkms/members/action/view/id/<?php echo $member['member_id']; ?>" target="_blank">
+                                href="/sugarkms/member/action/view/id/<?php echo $member['member_id']; ?>" target="_blank">
                                 <?php echo $member['member_name']; ?></a>
                             </td>
-                            <td class="br_td"><?php echo $member['gender'] == 'Male' ? 'M' : 'F'; ?></td>
-                            <td class="br_td "><?php echo $member['position']; ?></td>
-                            <td class="br_td "><?php echo $member['personal_email']; ?></td>
-                            <td class="br_td "><?php echo $member['phone']; ?></td>
-                            <td class="br_td "><a class=" target="_blank" href="<?php echo $member['facebook']; ?>">Link</a></td>
-                            <td class="br_td "><?php echo $member['skype']; ?></td>
-                            <td class="br_td ">
+                            <td ><?php echo $member['gender'] == 'Male' ? 'M' : 'F'; ?></td>
+                            <td class=" "><?php echo $member['position']; ?></td>
+                            <td class=" "><?php echo $member['personal_email']; ?></td>
+                            <td class=" "><?php echo $member['phone']; ?></td>
+                            <td class=" "><a class=" target="_blank" href="<?php echo $member['facebook']; ?>">Link</a></td>
+                            <td class=" "><?php echo $member['skype']; ?></td>
+                            <td class=" ">
                                 <?php 
                                     if(empty($member['day']) || empty($member['month'])) {
                                         echo !empty($member['year']) ? $member['year'] : '';
@@ -200,7 +264,7 @@
                                     }
                                 ?>
                             </td>
-                            <td class="br_td "><?php 
+                            <td class=" "><?php 
                             if(!empty($member['uni'])) {
                                 echo $member['uni'].' \''.substr($member['grad_year_u'],2,2);
                             } else {
@@ -249,18 +313,18 @@
                         </tr>
                         <?php foreach($team['members'] as $member) { ?>
                         <tr class="<?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"> 
-                            <td class="br_td" >
+                            <td  >
                                 <a class="link_btn "
-                                href="/sugarkms/members/action/view/id/<?php echo $member['member_id']; ?>" target="_blank">
+                                href="/sugarkms/member/action/view/id/<?php echo $member['member_id']; ?>" target="_blank">
                                 <?php echo $member['member_name']; ?></a>
                             </td>
-                            <td class="br_td"><?php echo $member['gender'] == 'Male' ? 'M' : 'F'; ?></td>
-                            <td class="br_td "><?php echo $member['position']; ?></td>
-                            <td class="br_td "><?php echo $member['personal_email']; ?></td>
-                            <td class="br_td "><?php echo $member['phone']; ?></td>
-                            <td class="br_td "><a class=" target="_blank" href="<?php echo $member['facebook']; ?>">Link</a></td>
-                            <td class="br_td "><?php echo $member['skype']; ?></td>
-                            <td class="br_td ">
+                            <td ><?php echo $member['gender'] == 'Male' ? 'M' : 'F'; ?></td>
+                            <td class=" "><?php echo $member['position']; ?></td>
+                            <td class=" "><?php echo $member['personal_email']; ?></td>
+                            <td class=" "><?php echo $member['phone']; ?></td>
+                            <td class=" "><a class=" target="_blank" href="<?php echo $member['facebook']; ?>">Link</a></td>
+                            <td class=" "><?php echo $member['skype']; ?></td>
+                            <td class=" ">
                                 <?php 
                                     if(empty($member['day']) || empty($member['month'])) {
                                         echo !empty($member['year']) ? $member['year'] : '';
@@ -269,7 +333,7 @@
                                     }
                                 ?>
                             </td>
-                            <td class="br_td "><?php 
+                            <td class=" "><?php 
                             if(!empty($member['uni'])) {
                                 echo $member['uni'].' \''.substr($member['grad_year_u'],2,2);
                             } else {
@@ -382,13 +446,13 @@
             </tr>
             <?php foreach($team['members'] as $member) { ?>
             <tr> 
-                <td class="br_td <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><?php echo $member['position']; ?></td>
-                <td class="br_td <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><?php echo $member['personal_email']; ?></td>
-                <td class="br_td <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><?php echo $member['phone']; ?></td>
-                <td class="br_td <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><a class="<?php if($member['withdrawn']) { echo 'withdrawn'; } ?> target="_blank" href="<?php echo $member['facebook']; ?>">Link</a></td>
-                <td class="br_td <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><?php echo $member['skype']; ?></td>
+                <td class=" <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><?php echo $member['position']; ?></td>
+                <td class=" <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><?php echo $member['personal_email']; ?></td>
+                <td class=" <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><?php echo $member['phone']; ?></td>
+                <td class=" <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><a class="<?php if($member['withdrawn']) { echo 'withdrawn'; } ?> target="_blank" href="<?php echo $member['facebook']; ?>">Link</a></td>
+                <td class=" <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><?php echo $member['skype']; ?></td>
                 <!--
-<td class="br_td <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><?php 
+<td class=" <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>"><?php 
                     if(!empty($member['uni'])) {
                         echo $member['uni'].' \''.substr($member['grad_year_u'],2,2);
                     } else {
@@ -399,9 +463,9 @@
                     }       
                 ?></td>
                 
-                <td class="br_td <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>">
-                    <?php if($objMember->canEditMember($profile['id'], $member['member_id'])) { ?>
-                        <a class="<?php if($member['withdrawn']) { echo 'withdrawn'; } ?> href="/sugarkms/members/action/edit/id/<?php echo $member['member_id']; ?>" target="_blank">Edit</a>
+                <td class=" <?php if($member['withdrawn']) { echo 'withdrawn'; } ?>">
+                    <?php if($objMember->canEditMember($current_user['id'], $member['member_id'])) { ?>
+                        <a class="<?php if($member['withdrawn']) { echo 'withdrawn'; } ?> href="/sugarkms/member/action/edit/id/<?php echo $member['member_id']; ?>" target="_blank">Edit</a>
                     <?php } else { ?><u class="greyed">Edit</u><?php } ?>
                 </td>
 -->
@@ -451,7 +515,7 @@
 
 
 
-<td class="br_td">
+<td >
                         <?php if($project['same_start_end'] == 'yes') { ?>
                             <select name="month_start" id="month_start" style="width:75px;border:1px solid #aaa;">
                                 <?php 
@@ -480,7 +544,7 @@
                         <?php } ?>
                     </td>
                     
-                    <td class="br_td">
+                    <td >
                         <?php if($project['same_start_end'] == 'yes') { ?>
                             <select name="month_end" id="month_end" style="width:75px;border:1px solid #aaa;">
                                 <?php 

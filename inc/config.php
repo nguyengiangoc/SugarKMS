@@ -1,6 +1,10 @@
 <?php
     if(!isset($_SESSION)) {
         session_start();
+        if(!isset($_SESSION['SugarKMS'])) {
+            $_SESSION['SugarKMS'] = array();
+        }
+        
     }
     
     defined("COUNTRY_LOCAL")

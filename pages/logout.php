@@ -1,4 +1,4 @@
 <?php
 Login::logout();
-Login::restrictAdmin($this->objURL);
+Helper::redirect(Login::$_login_page);
 ?>

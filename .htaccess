@@ -4,5 +4,7 @@ RewriteEngine on
 RewriteBase /sugarkms/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+IndexIgnore *
+Options -Indexes
 RewriteRule .* /sugarkms/index.php [L] 
 </IfModule>

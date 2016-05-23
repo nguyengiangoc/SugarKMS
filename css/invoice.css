@@ -10,7 +10,7 @@ th,td{text-align:left;vertical-align:top}
 .col_15{width:15%}
 .cl,.dev{height:0;font-size:0;line-height:0;width:100%;clear:both}
 .dev{height:14px}
-.br_td{border-top:dashed 1px #aaa}
+.{border-top:dashed 1px #aaa}
 
 .summarySection {
     background-color: #f1f1f1;

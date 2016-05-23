@@ -5,19 +5,17 @@
         $value = $_POST['value'];
         $type = $_POST['type'];
         $objTeam = new Team();
-        $team = $objTeam->getTeamById($id);
-        
-        
-        
+        $team = $objTeam->getTeamById($id);      
+       
         if(!empty($team)) {
             switch($type) {
                 case 'exco':
-                if($value == 'Yes') { 
-                    $update = 'No'; 
+                if($value == '1') { 
+                    $update = '0'; 
                     $order = '';
                 }
-                if($value == 'No') { 
-                    $update = 'Yes'; 
+                if($value == '0') { 
+                    $update = '1'; 
                     $last = $objTeam->getLastPosition(true);
                     $order = intval($last) + 1;
                 }
@@ -27,12 +25,12 @@
                 break;
                 
                 case 'project':
-                if($value == 'Yes') { 
-                    $update = 'No'; 
+                if($value == '1') { 
+                    $update = '0'; 
                     $order = '';
                 }
-                if($value == 'No') { 
-                    $update = 'Yes';
+                if($value == '0') { 
+                    $update = '1';
                     $last = $objTeam->getLastPosition();
                     $order = intval($last) + 1;
                 }
@@ -44,7 +42,7 @@
                 echo Helper::json(array('success' => false));
             }
             if($objTeam->updateTeam($details, $id)) {
-                if($update == 'No') {
+                if($update == '0') {
                     $result = $objTeam->resetOrder($type);
                     echo Helper::json(array('success' => true, 'reset' => 'yes', 'type' => $type, 'result' => $result));
                 } else {
